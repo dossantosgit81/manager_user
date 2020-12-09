@@ -2,6 +2,7 @@ const knex = require("../database/connection");
 const bcrypt = require("bcrypt");
 const PasswordTokens = require("../models/PasswordTokens");
 
+
 class User{
 
     async findAll(){
@@ -50,7 +51,7 @@ class User{
     async findEmail(email){
         try{
            const result = await knex
-            .select("*")
+            .select(["id_user", "email_user", "password_user", "role_user", "name_user"])
             .from("users").where({email_user: email});
            if(result.length > 0){
                 return true;
@@ -153,6 +154,8 @@ class User{
         .table("users");
         await PasswordTokens.setUsed(token);
     }
+
+    
 
 }
 
