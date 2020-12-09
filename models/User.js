@@ -62,6 +62,23 @@ class User{
         }
     }
 
+    async findByEmail(email){
+        try{
+           const result = await knex
+            .select("*")
+            .from("users").where({email_user: email});
+           if(result.length > 0){
+                return {status: true, result};
+           }else{
+               return false;
+           }
+        }catch(err){
+            console.log(err);
+            return false;
+        }
+    }
+
+
     async update(id, name, email, role){
 
         const user = await this.findById(id);
@@ -107,6 +124,23 @@ class User{
 
     }
 
+    async delete(id){
+        const user = await this.findById(id);
+        if(user != undefined){
+            try{
+                await
+                knex.delete()
+                .where({id_user: id})
+                .table("users");
+                return {status: true};
+            }catch(err){
+                console.log(err);
+                return {status: false, err: err};
+            }
+        }else{
+            return {status: false, err: "O usuario não existe, portanto não pode ser deletado."};
+        }
+    }
 
 }
 
