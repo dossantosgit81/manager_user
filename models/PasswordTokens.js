@@ -28,6 +28,43 @@ class PasswordTokens {
         }
     }
 
+   
+
+
+    async validate(token){
+        try{
+            const result = await 
+            knex
+            .select()
+            .where({token: token})
+            .table("password_tokens");
+            if(result.length > 0){
+                const tk = result[0];
+                console.log(tk);
+                if(tk.used){
+                    return {status: false};
+                }else{
+                    return {status: true, token: tk};
+                }
+            }else{
+                return {status: false};
+            }
+
+        }catch(err){
+            console.log(err);
+            return {status: false};
+        }
+
+    }
+
+    async setUsed(token){
+        await 
+        knex
+        .update({used: 1})
+        .where({token: token})
+        .table("password_tokens");
+    }
+
 }
 
 module.exports = new PasswordTokens();
